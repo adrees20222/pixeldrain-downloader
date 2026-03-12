@@ -1,0 +1,23 @@
+{
+    "manifest_version": 3,
+    "name": "Pixeldrain Video Downloader",
+    "version": "1.0",
+    "description": "Easily download videos and files directly from Pixeldrain links.",
+    "icons": {
+        "128": "logo.png"
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": "logo.png"
+    },
+    "permissions": [
+        "downloads"
+    ],
+    "host_permissions": [
+        "*://pixeldrain.com/*",
+        "*://cdn.pixeldrain.eu.cc/*"
+    ]
+}

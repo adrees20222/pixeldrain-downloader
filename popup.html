@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pixeldrain Downloader</title>
+    <link rel="stylesheet" href="style.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body class="launcher-body">
+    <div class="launcher-container">
+        <img src="logo.png" alt="Logo" class="launcher-logo" />
+        <h1 class="launcher-title">Pixeldrain DL</h1>
+        <p class="launcher-subtitle">Download directly bypassing the viewer</p>
+
+        <div class="input-group">
+            <input type="text" id="urlInput" class="custom-input" placeholder="Paste Pixeldrain URL here (e.g., https://pixeldrain.com/u/...)" />
+        </div>
+
+        <button type="button" id="downloadBtn" class="launch-btn">
+            <i class="fas fa-download"></i> Download Video
+        </button>
+        
+        <p id="statusMessage" class="status-msg hidden"></p>
+
+        <footer class="launcher-footer">
+            <div class="footer-row">
+                <a href="https://adrees2022.blogspot.com/" target="_blank" class="mini-link">Portfolio</a>
+                <a href="https://my-extension.blogspot.com/p/support.html" target="_blank" class="mini-link">Support</a>
+                <a href="https://my-extension.blogspot.com/p/donate.html" target="_blank" class="mini-link">Donate</a>
+            </div>
+            <div class="footer-row">
+                <a href="https://my-extension.blogspot.com/p/terms.html" target="_blank" class="mini-link">Terms of Services</a>
+                <a href="https://my-extension.blogspot.com/p/privacy-policy_15.html" target="_blank" class="mini-link">Privacy Policy</a>
+            </div>
+        </footer>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>
