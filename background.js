@@ -21,14 +21,33 @@ chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
     }
 
     if (fileId && typeof fetch !== "undefined") {
+      // Waking up the file on the original server
       const originApiUrl = `https://pixeldrain.com/api/file/${fileId}`;
 
       fetch(originApiUrl, { method: "HEAD" })
         .then(() => {
-          startRealDownload(request.url, sendResponse);
+          // Send request to CDN to check if it returns 200 or 404 (JSON)
+          return fetch(request.url, { method: "HEAD" });
+        })
+        .then((cdnResponse) => {
+          if (!cdnResponse.ok) {
+            // If CDN is still not ready, fallback to downloading from original pixeldrain
+            console.warn(
+              `CDN returned ${cdnResponse.status}, falling back to origin`,
+            );
+            startRealDownload(
+              `https://pixeldrain.com/api/file/${fileId}?download`,
+              sendResponse,
+            );
+          } else {
+            startRealDownload(request.url, sendResponse);
+          }
         })
         .catch((err) => {
-          console.error("Wake-up request failed, continuing anyway:", err);
+          console.error(
+            "Wake-up request failed, continuing with CDN anyway:",
+            err,
+          );
           startRealDownload(request.url, sendResponse);
         });
     } else {

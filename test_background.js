@@ -18,7 +18,7 @@ global.chrome = {
 };
 
 // Mock fetch for tests
-global.fetch = () => Promise.resolve();
+global.fetch = () => Promise.resolve({ ok: true, status: 200 });
 
 // Load background.js
 require("./background.js");
