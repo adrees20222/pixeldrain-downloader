@@ -1,5 +1,11 @@
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
     if (request.action === 'startDownload' && request.url) {
+        if (!request.url.startsWith('https://cdn.pixeldrain.eu.cc/')) {
+            console.error("Security violation: Invalid download URL origin");
+            sendResponse({ success: false, error: "Invalid download URL origin" });
+            return true;
+        }
+
         chrome.downloads.download({
             url: request.url,
             saveAs: true // Prompts the user where to save, or uses default behavior 
