@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.downloads.download({
             url: url,
             saveAs: true
-        }, (downloadId) => {
+        }, (_) => {
             if (chrome.runtime.lastError) {
                 showStatus('Download failed: ' + chrome.runtime.lastError.message, 'error');
             } else {

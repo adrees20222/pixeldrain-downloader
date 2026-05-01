@@ -1,0 +1,21 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "![Icon](logo.png)",
+  "main": "background.js",
+  "scripts": {
+    "test": "node popup.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrees20222/pixeldrain-downloader.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/adrees20222/pixeldrain-downloader/issues"
+  },
+  "homepage": "https://github.com/adrees20222/pixeldrain-downloader#readme"
+}
