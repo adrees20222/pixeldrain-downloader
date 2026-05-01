@@ -1,4 +1,7 @@
+ security-fix-download-url-12049799775616747561
 chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
+chrome.runtime.onMessage.addListener((request, _sender, sendResponse) => {
+main
     if (request.action === 'startDownload' && request.url) {
         if (!request.url.startsWith('https://cdn.pixeldrain.eu.cc/')) {
             console.error("Security violation: Invalid download URL origin");
