@@ -1,42 +1,53 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const urlInput = document.getElementById('urlInput');
-    const downloadBtn = document.getElementById('downloadBtn');
-    const statusMessage = document.getElementById('statusMessage');
+const PIXELDRAIN_URL_REGEX = /pixeldrain\.com\/u\/([a-zA-Z0-9_-]+)/;
+const PIXELDRAIN_ID_REGEX = /^[a-zA-Z0-9_-]+$/;
 
-    // Optionally auto-detect pixeldrain URLs in clipboard or current tab
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        if (tabs[0] && tabs[0].url && tabs[0].url.includes('pixeldrain.com/u/')) {
-            urlInput.value = tabs[0].url;
-        }
-    });
+function extractPixeldrainId(url) {
+    if (!url) return null;
+    const match = url.match(PIXELDRAIN_URL_REGEX);
+    if (match && match[1]) {
+        return match[1];
+    } else if (PIXELDRAIN_ID_REGEX.test(url)) {
+        return url;
+    }
+    return null;
+}
 
-    downloadBtn.addEventListener('click', () => {
-        statusMessage.classList.add('hidden');
-        statusMessage.classList.remove('error', 'success');
-        
-        let url = urlInput.value.trim();
-        
-        if (!url) {
-            showStatus('Please enter a Pixeldrain URL.', 'error');
-            return;
-        }
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { extractPixeldrainId, PIXELDRAIN_URL_REGEX, PIXELDRAIN_ID_REGEX };
+}
 
-        // Extract ID from full URL or just use the ID
-        let fileId = '';
-        const regex = /pixeldrain\.com\/u\/([a-zA-Z0-9_-]+)/;
-        const match = url.match(regex);
-        
-        if (match && match[1]) {
-            fileId = match[1];
-        } else if (/^[a-zA-Z0-9_-]+$/.test(url)) {
-            // Assume it's just the ID
-            fileId = url;
-        } else {
-            showStatus('Invalid Pixeldrain URL format.', 'error');
-            return;
-        }
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlInput = document.getElementById('urlInput');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const statusMessage = document.getElementById('statusMessage');
 
-        const downloadUrl = `https://cdn.pixeldrain.eu.cc/${fileId}`;
+        // Optionally auto-detect pixeldrain URLs in clipboard or current tab
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            if (tabs[0] && tabs[0].url && tabs[0].url.includes('pixeldrain.com/u/')) {
+                urlInput.value = tabs[0].url;
+            }
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            statusMessage.classList.add('hidden');
+            statusMessage.classList.remove('error', 'success');
+
+            let url = urlInput.value.trim();
+
+            if (!url) {
+                showStatus('Please enter a Pixeldrain URL.', 'error');
+                return;
+            }
+
+            const fileId = extractPixeldrainId(url);
+
+            if (!fileId) {
+                showStatus('Invalid Pixeldrain URL format.', 'error');
+                return;
+            }
+
+            const downloadUrl = `https://cdn.pixeldrain.eu.cc/${fileId}`;
         
         showStatus('Starting download...', 'success');
 
@@ -59,16 +70,17 @@ document.addEventListener('DOMContentLoaded', () => {
         statusMessage.classList.add(type);
     }
 
-    function startDownloadLocal(url) {
-        chrome.downloads.download({
-            url: url,
-            saveAs: true
-        }, (downloadId) => {
-            if (chrome.runtime.lastError) {
-                showStatus('Download failed: ' + chrome.runtime.lastError.message, 'error');
-            } else {
-                showStatus('Download triggered successfully!', 'success');
-            }
-        });
-    }
-});
+        function startDownloadLocal(url) {
+            chrome.downloads.download({
+                url: url,
+                saveAs: true
+            }, (downloadId) => {
+                if (chrome.runtime.lastError) {
+                    showStatus('Download failed: ' + chrome.runtime.lastError.message, 'error');
+                } else {
+                    showStatus('Download triggered successfully!', 'success');
+                }
+            });
+        }
+    });
+}
